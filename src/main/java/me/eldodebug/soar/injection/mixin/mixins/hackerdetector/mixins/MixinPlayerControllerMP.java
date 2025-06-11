@@ -30,6 +30,10 @@ public class MixinPlayerControllerMP {
         try {
             EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
             if (player != null) {
+                // クリエイティブはbypass
+                if (player.capabilities != null && player.capabilities.isCreativeMode) {
+                    return;
+                }
                 // HackerDetectorClient logic
                 HackerDetectorClient client = HackerDetectorClient.getInstance();
                 if (client != null) {

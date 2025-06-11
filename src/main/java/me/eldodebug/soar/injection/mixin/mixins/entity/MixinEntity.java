@@ -46,6 +46,10 @@ public class MixinEntity {
 			// detectorの処理を直接実行
 
 			if (mod.fastBreak.isToggled()){
+				// クリエイティブはbypass
+				if (player.capabilities != null && player.capabilities.isCreativeMode) {
+					return;
+				}
 				for (AbstractDetector detector : client.getDetectors().values()) {
 					if (detector.isEnabled()) {
 						String name = player.getName();
