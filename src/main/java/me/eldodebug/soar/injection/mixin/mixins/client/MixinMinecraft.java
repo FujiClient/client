@@ -1,12 +1,9 @@
 package me.eldodebug.soar.injection.mixin.mixins.client;
 
 import eu.shoroa.contrib.render.ShBlur;
-<<<<<<< HEAD
 import me.eldodebug.soar.injection.mixin.mixins.hackerdetector.HackerDetectorClient;
-=======
 import me.eldodebug.soar.utils.MacOSUtils;
 import net.minecraft.util.Util;
->>>>>>> caa521d880a79f4b058943f020948e6a86852255
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;

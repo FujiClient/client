@@ -15,7 +15,7 @@ public abstract class AbstractDetector {
     public abstract boolean isEnabled();
     public abstract void checkPlayer(EntityPlayer player);
 
-    protected void flag(EntityPlayer player, String reason) {
+    public void flag(EntityPlayer player, String reason) {
         client.flagPlayer(player, detectorName, reason);
     }
 

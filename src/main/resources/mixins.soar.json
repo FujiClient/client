@@ -105,9 +105,7 @@
     "world.MixinWorldChunkManager",
     "world.MixinWorldClient",
     "world.MixinWorldInfo",
-    "hackerdetector.mixins.MixinMinecraft",
     "hackerdetector.mixins.MixinNetHandlerPlayClient",
-    "hackerdetector.mixins.MixinPlayerControllerMP",
-    "hackerdetector.mixins.MixinEntityPlayer"
+    "hackerdetector.mixins.MixinPlayerControllerMP"
   ]
   }

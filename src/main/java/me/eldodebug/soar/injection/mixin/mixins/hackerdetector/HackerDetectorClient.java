@@ -41,7 +41,7 @@ public class HackerDetectorClient {
     private void initializeDetectors() {
         detectors.put("killaura", new KillAuraDetector());
         detectors.put("autoblock", new AutoBlockDetector());
-        detectors.put("fastbreak", new FastBreakDetector());
+//        detectors.put("fastbreak", new FastBreakDetector());
         detectors.put("keepsprint", new KeepSprintDetector());
         detectors.put("noslowdown", new NoSlowdownDetector());
         detectors.put("scaffold", new ScaffoldDetector());
@@ -126,17 +126,6 @@ public class HackerDetectorClient {
                 return "scaffold";
             default:
                 return "cheating";
-        }
-    }
-
-
-    public void processPlayerUpdate(EntityPlayer player) {
-        if (player == null || player == Minecraft.getMinecraft().thePlayer) return;
-
-        for (AbstractDetector detector : detectors.values()) {
-            if (detector.isEnabled()) {
-                detector.checkPlayer(player);
-            }
         }
     }
 
