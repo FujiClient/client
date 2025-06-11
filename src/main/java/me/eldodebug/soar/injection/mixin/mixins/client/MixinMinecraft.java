@@ -1,6 +1,7 @@
 package me.eldodebug.soar.injection.mixin.mixins.client;
 
 import eu.shoroa.contrib.render.ShBlur;
+import me.eldodebug.soar.injection.mixin.mixins.hackerdetector.HackerDetectorClient;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -543,4 +544,19 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
 	public void inject$resize(int width, int height, CallbackInfo ci) {
 		ShBlur.getInstance().resize();
 	}
+
+	private HackerDetectorClient hackerDetector;
+
+	@Inject(method = "startGame", at = @At("TAIL"))
+	private void onStartGame(CallbackInfo ci) {
+		hackerDetector = new HackerDetectorClient();
+	}
+
+	@Inject(method = "runTick", at = @At("TAIL"))
+	private void onRunTick(CallbackInfo ci) {
+		if (hackerDetector != null) {
+			hackerDetector.getEventHandler().onWorldTick();
+		}
+	}
+
 }

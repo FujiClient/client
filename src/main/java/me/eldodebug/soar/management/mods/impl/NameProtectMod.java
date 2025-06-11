@@ -5,6 +5,7 @@ import me.eldodebug.soar.management.event.impl.EventText;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.Mod;
 import me.eldodebug.soar.management.mods.ModCategory;
+import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
 import me.eldodebug.soar.management.mods.settings.impl.TextSetting;
 
 public class NameProtectMod extends Mod {

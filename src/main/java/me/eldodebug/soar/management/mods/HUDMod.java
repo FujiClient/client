@@ -171,6 +171,10 @@ public class HUDMod extends Mod {
 		drawRoundedRect(addX, addY, width, height, radius, this.getFontColor());
 	}
 
+	public void drawBlackRoundedRect(float addX, float addY, float width, float height, float radius) {
+		drawRoundedRect(addX, addY, width, height, radius, Color.BLACK);
+	}
+
 	public void drawBackground(float addX, float addY, float width, float height, float radius) {
 
 		Glide instance = Glide.getInstance();
@@ -293,6 +297,7 @@ public class HUDMod extends Mod {
 	}
 
 	public void drawCenteredText(String text, float addX, float addY, float size, Font font) {
+		drawCenteredText(text, addX+1, addY+1, size, Fonts.SEMIBOLD, Color.black);
 		drawCenteredText(text, addX, addY, size, font, getFontColor());
 	}
 

@@ -67,4 +67,5 @@ public class AnimationsMod extends Mod {
 	public BooleanSetting getRodSetting() {
 		return rodSetting;
 	}
+
 }

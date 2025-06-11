@@ -9,7 +9,7 @@ public class SlowSwingMod extends Mod {
 
 	private static SlowSwingMod instance;
 	
-	private NumberSetting delaySetting = new NumberSetting(TranslateText.DELAY, this, 14, 2, 20, true);
+	private NumberSetting delaySetting = new NumberSetting(TranslateText.DELAY, this, 14, 2, 50, true);
 	
 	public SlowSwingMod() {
 		super(TranslateText.SLOW_SWING, TranslateText.SLOW_SWING_DESCRIPTION, ModCategory.PLAYER);

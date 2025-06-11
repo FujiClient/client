@@ -100,6 +100,7 @@ public class KeystrokesMod extends HUDMod {
 			this.restore();
 			
 			if(!unmarkedSetting.isToggled()) {
+				this.drawBlackRoundedRect(10+1, 74F+1, (26 * 3) - 6, 2, 1);
 				this.drawRoundedRect(10, 74F, (26 * 3) - 6, 2, 1);
 			}
 		}

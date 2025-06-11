@@ -45,8 +45,8 @@ public class MixinGuiChat extends GuiScreen {
     			Multithreading.runAsync(() -> {
     				GuiChatHook.sendTranslatedMessage(s);
     			});
-    		} else {
-    			this.sendChatMessage(s);
+			} else {
+				this.sendChatMessage(s);
     		}
         }
 	}

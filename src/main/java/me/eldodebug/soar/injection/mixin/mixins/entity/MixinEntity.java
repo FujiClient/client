@@ -1,5 +1,6 @@
 package me.eldodebug.soar.injection.mixin.mixins.entity;
 
+import me.eldodebug.soar.injection.mixin.mixins.hackerdetector.HackerDetectorClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +27,14 @@ public class MixinEntity {
         	ci.cancel();
         }
     }
+
+	@Inject(method = "onUpdate", at = @At("TAIL"))
+	private void onPlayerUpdate(CallbackInfo ci) {
+		EntityPlayer player = (EntityPlayer)(Object)this;
+		if (HackerDetectorClient.getInstance() != null) {
+			HackerDetectorClient.getInstance().processPlayerUpdate(player);
+		}
+	}
     
     @Redirect(method = "getBrightnessForRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isBlockLoaded(Lnet/minecraft/util/BlockPos;)Z"))
     public boolean alwaysReturnTrue(World world, BlockPos pos) {

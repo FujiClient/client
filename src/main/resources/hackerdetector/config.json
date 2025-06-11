@@ -1,0 +1,19 @@
+{
+  "killAuraEnabled": true,
+  "autoBlockEnabled": true,
+  "fastBreakEnabled": true,
+  "keepSprintEnabled": true,
+  "noSlowdownEnabled": true,
+  "scaffoldEnabled": true,
+  "ghostHandEnabled": true,
+  "showFlagMessage": true,
+  "playFlagSound": true,
+  "compactFlagMessages": true,
+  "singleFlagPerGame": true,
+  "autoReport": false,
+  "reportCooldownMs": 30000,
+  "killAuraMaxAngle": 30,
+  "keepSprintThreshold": 0.6,
+  "fastBreakThreshold": 5,
+  "noSlowdownThreshold": 0.8
+}
