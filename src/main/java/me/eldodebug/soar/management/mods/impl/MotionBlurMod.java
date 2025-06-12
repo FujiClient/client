@@ -26,13 +26,19 @@ public class MotionBlurMod extends Mod {
     private long lastCheck = 0L;
     
 	private ResourceLocation motion_blur = new ResourceLocation("minecraft:shaders/post/motion_blur.json");
+	private ResourceLocation motion_blur_gaussian = new ResourceLocation("minecraft:shaders/post/motion_blur_gaussian.json");
+	private ResourceLocation motion_blur_box = new ResourceLocation("minecraft:shaders/post/motion_blur_box.json");
 	private ShaderGroup group;
 	private float groupBlur;
 	private boolean loaded;
 	private int prevWidth, prevHeight;
 	
 	private ComboSetting typeSetting = new ComboSetting(TranslateText.TYPE, this, TranslateText.SHADER, new ArrayList<Option>(Arrays.asList(
-			new Option(TranslateText.ACCUM), new Option(TranslateText.SHADER))));
+			new Option(TranslateText.ACCUM),
+			new Option(TranslateText.SHADER),
+			new Option("GAUSSIAN"),
+			new Option("BOX")
+	)));
 
 	private NumberSetting amountSetting = new NumberSetting(TranslateText.AMOUNT, this, 0.5, 0.1, 0.9, false);
 	
@@ -49,24 +55,29 @@ public class MotionBlurMod extends Mod {
 	public void onShader(EventShader event) {
 		
 		ScaledResolution sr = new ScaledResolution(mc);
-		
-		if(typeSetting.getOption().getTranslate().equals(TranslateText.SHADER)) {
-			
-			if(group == null || prevWidth != sr.getScaledWidth() || prevHeight != sr.getScaledHeight()) {
-				
+
+		String type = typeSetting.getOption().getTranslate();
+		ResourceLocation shaderRes = null;
+		if(type.equals(TranslateText.SHADER)) {
+			shaderRes = motion_blur;
+		} else if(type.equalsIgnoreCase("GAUSSIAN")) {
+			shaderRes = motion_blur_gaussian;
+		} else if(type.equalsIgnoreCase("BOX")) {
+			shaderRes = motion_blur_box;
+		}
+
+		if(shaderRes != null) {
+			if(group == null || prevWidth != sr.getScaledWidth() || prevHeight != sr.getScaledHeight() || !group.getShaderGroupName().equals(shaderRes.toString())) {
 				prevWidth = sr.getScaledWidth();
 				prevHeight = sr.getScaledHeight();
-				
 				groupBlur = amountSetting.getValueFloat();
-				
 				try {
-					group = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), motion_blur);
+					group = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderRes);
 					group.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
-			
 			if(groupBlur != amountSetting.getValueFloat() || !loaded) {
 				loaded = true;
 				((IMixinShaderGroup) group).getListShaders().forEach((shader) -> {
@@ -77,7 +88,6 @@ public class MotionBlurMod extends Mod {
 				});
 				groupBlur = amountSetting.getValueFloat();
 			}
-			
 			event.getGroups().add(group);
 		}
 	}

@@ -11,6 +11,8 @@ import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
+import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
+import me.eldodebug.soar.management.mods.settings.impl.NumberSetting;
 import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
@@ -25,6 +27,16 @@ public class HUDMod extends Mod {
 	private int x, y, draggingX, draggingY, width, height;
 	private float scale;
 	private boolean dragging, draggable;
+
+	// --- 影・ブラー設定 ---
+	protected BooleanSetting shadowSetting = new BooleanSetting(TranslateText.SHADOW, this, true);
+	protected NumberSetting shadowAlphaSetting = new NumberSetting("Shadow Alpha", this, 0.7, 0.0, 1.0, false);
+	protected ComboSetting shadowStyleSetting = new ComboSetting("Shadow Style", this, "Soft", 
+		java.util.Arrays.asList(
+			new Option("Soft"), new Option("Glow"), new Option("Outline"), new Option("Drop"), new Option("None")
+		)
+	);
+	protected NumberSetting blurStrengthSetting = new NumberSetting("Blur Strength", this, 8, 1, 32, true);
 
 	public HUDMod(TranslateText nameTranslate, TranslateText descriptionText) {
 		super(nameTranslate, descriptionText, ModCategory.HUD);
@@ -203,6 +215,11 @@ public class HUDMod extends Mod {
 		float x = this.x + (addX * scale);
 		float y = this.y + (addY * scale);
 
+		// --- ブラー強度反映 ---
+		if (InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
+			ShBlur.getInstance().drawBlur(x, y, lastWidth, lastHeight, radius, (int) blurStrengthSetting.getValue());
+		}
+
 		if (isBlur) ShBlur.getInstance().drawBlur(x,y,lastWidth,lastHeight,radius);
 
 		if(isNormal || isVanilla || isShadow || isDark || isLight || isModern) {
@@ -265,15 +282,40 @@ public class HUDMod extends Mod {
 		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
 		float lastSize = size * scale;
 		Option theme = InternalSettingsMod.getInstance().getModThemeSetting().getOption();
-		boolean isText = theme.getTranslate().equals(TranslateText.TEXT);
 
-		if(isText){
-			nvg.save();
-			nvg.fontBlur(20);
-			nvg.drawText(text, x + (addX * scale), y + (addY * scale), new Color(0,0,0, 150), lastSize, font);
-			nvg.restore();
+		// --- 影描画 ---
+		if (shadowSetting.isToggled() && !shadowStyleSetting.getOption().getTranslate().equals("None")) {
+			float alpha = (float) (shadowAlphaSetting.getValue() * 255);
+			Color shadowColor = new Color(0, 0, 0, (int) alpha);
+
+			switch (shadowStyleSetting.getOption().getTranslate()) {
+				case "Soft":
+					nvg.save();
+					nvg.fontBlur(20);
+					nvg.drawText(text, x + (addX * scale) + 1, y + (addY * scale) + 1, shadowColor, lastSize, font);
+					nvg.restore();
+					break;
+				case "Glow":
+					nvg.save();
+					nvg.fontBlur(40);
+					nvg.drawText(text, x + (addX * scale), y + (addY * scale), shadowColor, lastSize, font);
+					nvg.restore();
+					break;
+				case "Outline":
+					nvg.drawText(text, x + (addX * scale) - 1, y + (addY * scale), shadowColor, lastSize, font);
+					nvg.drawText(text, x + (addX * scale) + 1, y + (addY * scale), shadowColor, lastSize, font);
+					nvg.drawText(text, x + (addX * scale), y + (addY * scale) - 1, shadowColor, lastSize, font);
+					nvg.drawText(text, x + (addX * scale), y + (addY * scale) + 1, shadowColor, lastSize, font);
+					break;
+				case "Drop":
+					nvg.drawText(text, x + (addX * scale) + 2, y + (addY * scale) + 2, shadowColor, lastSize, font);
+					break;
+				default:
+					break;
+			}
 		}
 
+		// 本体
 		nvg.drawText(text, x + (addX * scale), y + (addY * scale), new Color(color.getRed(), color.getGreen(), color.getBlue(), 180), lastSize, font);
 	}
 

@@ -18,15 +18,15 @@ public class KeystrokesMod extends HUDMod {
 
 	private BooleanSetting spaceSetting = new BooleanSetting(TranslateText.SPACE, this, true);
 	private BooleanSetting unmarkedSetting = new BooleanSetting(TranslateText.UNMARKED, this, false);
-	
-	private SimpleAnimation[] animations = new SimpleAnimation[5];
-	
+
+	// 影・ブラー設定
+	// HUDModのprotectedフィールドを利用
 	public KeystrokesMod() {
 		super(TranslateText.KEYSTROKES, TranslateText.KEYSTROKES_DESCRIPTION);
-		
 	    for (int i = 0; i < 5; i++) {
 	        animations[i] = new SimpleAnimation();
 	    }
+		this.addSettings(spaceSetting, unmarkedSetting, shadowSetting, shadowAlphaSetting, shadowStyleSetting, blurStrengthSetting);
 	}
 	
 	@EventTarget
@@ -110,6 +110,33 @@ public class KeystrokesMod extends HUDMod {
 	}
 	private void drawHighlight(float addX, float addY, float width, float height, float radius, Color color){
 		boolean rect = InternalSettingsMod.getInstance().getModThemeSetting().getOption().getTranslate().equals(TranslateText.RECT);
-		if (!rect) this.drawRoundedRect(addX, addY, width, height, radius, color); else  this.drawRect(addX, addY, width, height, color);
+
+		// 影描画
+		if (shadowSetting.isToggled() && !shadowStyleSetting.getOption().getTranslate().equals("None")) {
+			float alpha = (float) (shadowAlphaSetting.getValue() * 255);
+			Color shadowColor = new Color(0, 0, 0, (int) alpha);
+
+			switch (shadowStyleSetting.getOption().getTranslate()) {
+				case "Soft":
+					this.drawRoundedRect(addX + 2, addY + 2, width, height, radius, shadowColor);
+					break;
+				case "Glow":
+					this.drawRoundedRect(addX, addY, width, height, radius + 6, new Color(0, 0, 0, (int) (alpha * 0.5)));
+					break;
+				case "Outline":
+					this.drawRoundedRect(addX - 1, addY - 1, width + 2, height + 2, radius + 1, shadowColor);
+					break;
+				case "Drop":
+					this.drawRoundedRect(addX + 4, addY + 4, width, height, radius, shadowColor);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (!rect) this.drawRoundedRect(addX, addY, width, height, radius, color); 
+		else  this.drawRect(addX, addY, width, height, color);
 	}
+
+	// drawCenteredTextもHUDModのdrawTextを使うことで影が反映される
 }

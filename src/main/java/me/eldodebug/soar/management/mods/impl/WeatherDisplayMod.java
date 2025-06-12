@@ -15,6 +15,7 @@ public class WeatherDisplayMod extends SimpleHUDMod {
 	
 	public WeatherDisplayMod() {
 		super(TranslateText.WEATHER_DISPLAY, TranslateText.WEATHER_DISPLAY_DESCRIPTION);
+		this.addSettings(iconSetting, shadowSetting, shadowAlphaSetting, shadowStyleSetting, blurStrengthSetting);
 	}
 
 	@EventTarget

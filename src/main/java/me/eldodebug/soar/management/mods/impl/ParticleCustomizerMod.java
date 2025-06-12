@@ -45,13 +45,15 @@ public class ParticleCustomizerMod extends Mod {
 		boolean alwaysCriticals = alwaysCriticalsSetting.isToggled();
 		
 		if(critical || alwaysCriticals) {
-			for(int i = 0; i < cMultiplier - 1; i++) {
+			int count = Math.max(1, cMultiplier - 1);
+			for(int i = 0; i < count; i++) {
 				mc.effectRenderer.emitParticleAtEntity(event.getEntity(), EnumParticleTypes.CRIT);
 			}
 		}
 		
 		if(alwaysSharpness || sharpness) {
-			for(int i = 0; i < sMultiplier - 1; i++) {
+			int count = Math.max(1, sMultiplier - 1);
+			for(int i = 0; i < count; i++) {
 				mc.effectRenderer.emitParticleAtEntity(event.getEntity(), EnumParticleTypes.CRIT_MAGIC);
 			}
 		}

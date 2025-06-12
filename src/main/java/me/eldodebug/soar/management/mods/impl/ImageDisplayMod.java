@@ -28,6 +28,7 @@ public class ImageDisplayMod extends HUDMod {
 	
 	public ImageDisplayMod() {
 		super(TranslateText.IMAGE_DISPLAY, TranslateText.IMAGE_DISPLAY_DESCRIPTION);
+		this.addSettings(radiusSetting, alphaSetting, shadowSetting, shadowAlphaSetting, shadowStyleSetting, blurStrengthSetting, imageSetting);
 	}
 
 	@EventTarget
